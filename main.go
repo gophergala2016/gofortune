@@ -1,69 +1,86 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	_ "html"
 	"io/ioutil"
 	"net/http"
 	"strings"
 )
 
-type Handler struct {
+type Fortune struct {
+	wr   http.ResponseWriter
+	rq   *http.Request
+	deck *Deck
 }
 
-func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
+	f.wr = wr
+	f.rq = rq
+	path := rq.URL.Path
+	contentType := "text/html"
+	root := "."
+
 	switch {
-	case strings.HasPrefix(r.URL.Path, "/playing-cards/"):
-		data, err := ioutil.ReadFile("." + r.URL.Path)
-		if err != nil {
-			fmt.Fprint(w, err)
-		} else {
-			w.Header().Add("Content-Type", "image/png")
-			w.Write(data)
-		}
+	case strings.HasPrefix(path, "/playing-cards/"):
+		contentType = "image/png"
 
-	case strings.HasPrefix(r.URL.Path, "/js/"):
-		data, err := ioutil.ReadFile("." + r.URL.Path)
-		if err != nil {
-			fmt.Fprint(w, err)
-		} else {
-			w.Header().Add("Content-Type", "application/javascript")
-			w.Write(data)
-		}
+	case strings.HasPrefix(path, "/js/"):
+		contentType = "application/javascript"
 
-	case strings.HasPrefix(r.URL.Path, "/css/"):
-		data, err := ioutil.ReadFile("." + r.URL.Path)
-		if err != nil {
-			fmt.Fprint(w, err)
-		} else {
-			w.Header().Add("Content-Type", "text/css")
-			w.Write(data)
-		}
+	case strings.HasPrefix(path, "/css/"):
+		contentType = "text/css"
 
-	case strings.HasPrefix(r.URL.Path, "/html/"):
-		data, err := ioutil.ReadFile("." + r.URL.Path)
-		if err != nil {
-			fmt.Fprint(w, err)
-		} else {
-			w.Header().Add("Content-Type", "text/html")
-			w.Write(data)
-		}
+	case strings.HasPrefix(path, "/html/"):
+		contentType = "text/html"
 
-	case r.URL.Path == "/":
-		data, err := ioutil.ReadFile("./html/main.html")
-		if err != nil {
-			fmt.Fprint(w, err)
+	case path == "/":
+		contentType = "text/html"
+		path = "/html/main.html"
+
+	case path == "/init":
+		wr.Header().Add("Content-Type", "application/json")
+		f.init()
+		path = ""
+	}
+
+	if len(path) > 0 {
+		wr.Header().Add("Content-Type", contentType)
+		data, err := ioutil.ReadFile(root + path)
+		if err == nil {
+			wr.Write(data)
 		} else {
-			w.Header().Add("Content-Type", "text/html")
-			w.Write(data)
+			fmt.Fprint(wr, err)
 		}
 	}
 }
 
-func main() {
-	var handler Handler
+func (f *Fortune) init() {
+	f.deck = &Deck{}
+	f.deck.init()
+	f.deck.shuffle()
+	type Response struct {
+		Cards []*Card
+		Error string
+	}
+	f.deck.Cards = f.deck.Cards[:21]
+	response := &Response{
+		Cards: f.deck.Cards,
+	}
+	data, err := json.Marshal(response)
+	if err != nil {
+		response.Error = err.Error()
+	}
+	f.wr.Write(data)
+}
 
-	if err := http.ListenAndServe(":8080", handler); err != nil {
+func main() {
+	var fortune Fortune
+
+	fmt.Println("Listening on http://localhost:8080")
+
+	err := http.ListenAndServe(":8080", &fortune)
+	if err != nil {
 		fmt.Println(err)
 	}
 }
