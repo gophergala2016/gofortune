@@ -6,11 +6,46 @@
 	<link rel='stylesheet' type='text/css' href='css/main.css'>
 </head>
 <body>
-	<div ng-controller="cardsController" class='deck' ng-model="cards">
-		<span ng-repeat="card in cards">
-			<img class='card' style='left:{{$index*50}}px;' 
-				ng-src="playing-cards/{{card.Image}}"/>
-		</span>
+	<div ng-controller="cardsController">
+		<h3 class='title'>GoFortune</h3>
+		<div ng-show="step == 1" class='page'>
+			<div class='nav'>
+				Memorize a card from the deck then click
+					<a href="#" class='cmd' ng-click='step2()'>Continue</a>
+			</div>
+			<div class='deck'>
+				<span ng-repeat="card in cards">
+					<img class='card' style='margin:20px 0px 0px {{$index*40}}px' 
+						ng-src="playing-cards/{{card.Image}}"/>
+				</span>
+			</div>
+		</div>
+		<div ng-show="step == 2" class='page'>
+			<div class='nav'>
+				Select the row that contains your card:
+			</div>
+			<a href="#" class='cmdSelect' ng-click='deal(0)' style='top:220px;left:20px'>Select</a>
+			<a href="#" class='cmdSelect' ng-click='deal(1)' style='top:480px;left:20px'>Select</a>
+			<a href="#" class='cmdSelect' ng-click='deal(2)' style='top:740px;left:20px'>Select</a>
+			<div class='deck' style='top:88px;left:100px'>
+				<span ng-repeat="card in row0">
+					<img class='card' style='margin:20px 0px 0px {{$index*100}}px' 
+						ng-src="playing-cards/{{card.Image}}"/>
+				</span>
+			</div>
+			<div class='deck' style='top:350px;left:100px'>
+				<span ng-repeat="card in row1">
+					<img class='card' style='margin:20px 0px 0px {{$index*100}}px' 
+						ng-src="playing-cards/{{card.Image}}"/>
+				</span>
+			</div>
+			<div class='deck' style='top:610px;left:100px'>
+				<span ng-repeat="card in row2">
+					<img class='card' style='margin:20px 0px 0px {{$index*100}}px' 
+						ng-src="playing-cards/{{card.Image}}"/>
+				</span>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

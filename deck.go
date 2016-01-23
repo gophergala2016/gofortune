@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -38,17 +40,48 @@ func (d *Deck) shuffle() {
 	var cards []*Card
 	rand.Seed(time.Now().UnixNano())
 	total := len(cardImages)
-	i := 0
 	for {
 		index := rand.Intn(total)
 		if d.Cards[index] != nil {
 			cards = append(cards, d.Cards[index])
+			d.Cards[index] = nil
 			if len(cards) == total {
 				break
 			}
-			d.Cards[index] = nil
-			i++
 		}
 	}
 	d.Cards = cards
+}
+
+func (d *Deck) String() string {
+	s := ""
+	for i, card := range d.Cards {
+		s += strings.Split(card.Image, ".")[0] + " "
+		if i == 6 || i == 13 {
+			s += " "
+		}
+	}
+	return s
+}
+
+// Place selected row in the middle
+func (d *Deck) deal(row int) {
+	log.Printf("before: %s", d)
+	var cards []*Card
+	switch {
+	case row == 0:
+		cards = append(cards, d.Cards[7:14]...)
+		cards = append(cards, d.Cards[:7]...)
+		cards = append(cards, d.Cards[14:]...)
+
+	case row == 1:
+		cards = d.Cards
+
+	case row == 2:
+		cards = append(cards, d.Cards[:7]...)
+		cards = append(cards, d.Cards[14:]...)
+		cards = append(cards, d.Cards[7:14]...)
+	}
+	d.Cards = cards
+	log.Printf(" after: %s", d)
 }
