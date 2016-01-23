@@ -1,0 +1,16 @@
+<!doctype html>
+<html ng-app="gofortune">
+<head>
+	<script src='js/angular.min.js'></script>
+	<script src='js/main.js'></script>
+	<link rel='stylesheet' type='text/css' href='css/main.css'>
+</head>
+<body>
+	<div ng-controller="cardsController">
+		<div ng-repeat="card in cards">
+			<img class='card' style='left:{{100+$index*40}}px;top:100px' 
+				ng-src="playing-cards/{{card.file}}"/>
+		</div>
+	</div>
+</body>
+</html>
