@@ -3,7 +3,7 @@ img.card {position:absolute}
 span.card {position:absolute;text-align:left}
 div.deck {position:absolute; text-align:center; margin:0px 0px 0px 20px}
 div.nav {font-size:16pt; font-weight:bold; margin:20px 0px 0px 20px}
-a.cmd {color:black; text-decoration:none; background:#bbccdd;
+a.cmd {font-size:16pt; color:black; text-decoration:none; background:#bbccdd;
 	padding:2px 8px 2px 8px; border-radius:4px}
 a.cmd:hover {color:white; background:#99aabb}
 h3.title {font-size:16pt; margin:20px 0px 0px 20px;color:#336699}
