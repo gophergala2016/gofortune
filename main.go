@@ -85,11 +85,13 @@ func (f *Fortune) init() {
 	f.deck = &Deck{}
 	f.deck.init()
 	f.deck.shuffle()
+	f.deck.Cards = f.deck.Cards[:21]
+
 	type Response struct {
 		Cards []*Card
 		Error string
 	}
-	f.deck.Cards = f.deck.Cards[:21]
+
 	response := &Response{
 		Cards: f.deck.Cards,
 	}

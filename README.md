@@ -12,3 +12,5 @@ $ go build
 $ ./gofortune
 ```
 Navigate with a browser to: ```http://localhost:8080```
+<br><br>
+Live version ```http://angiud.com:8080```
