@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"regexp"
 	"runtime/debug"
@@ -256,7 +257,7 @@ func (f *Fortune) fortune() {
 	}
 
 	key, _ := words[request.Card]
-	url := "https://twitter.com/search?q=" + key
+	url := "https://twitter.com/search?f=realtime&q=" + key
 	resp, err := http.Get(url)
 	if err != nil {
 		response.Error = "Error: " + err.Error()
@@ -268,11 +269,12 @@ func (f *Fortune) fortune() {
 	resp.Body.Close()
 
 	search := regexp.MustCompile(`<p class="TweetTextSize .*>.*</p>`)
-	tweets := search.FindStringSubmatch(string(body))
+	tweets := search.FindAllString(string(body), -1)
 
 	tweet := "Unable to fetch tweets."
 	if len(tweets) > 0 {
-		tweet = tweets[0]
+		index := rand.Intn(len(tweets))
+		tweet = tweets[index]
 	}
 	response.Tweet = tweet
 	fmt.Printf("Visitor=%s word=%s fortune=%s\n", f.rq.RemoteAddr, key, tweet)
