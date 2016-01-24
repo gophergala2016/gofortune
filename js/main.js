@@ -42,7 +42,7 @@ function deal(row) {
 				}
 				scope.http.post('/fortune', JSON.stringify(req)).success(showFortune)
 			}
-			setTimeout(f, 100)
+			setTimeout(f, 1000)
 			return
 		}
 		//console.log(data)
