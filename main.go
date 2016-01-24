@@ -11,14 +11,16 @@ import (
 	"net/http"
 	"regexp"
 	"runtime/debug"
+	"sort"
 	"strings"
 	"time"
 )
 
 type Fortune struct {
-	wr   http.ResponseWriter
-	rq   *http.Request
-	deck *Deck
+	wr         http.ResponseWriter
+	rq         *http.Request
+	deck       *Deck
+	scoreCards *Deck
 }
 
 func init() {
@@ -32,6 +34,8 @@ func init() {
 
 func main() {
 	var fortune Fortune
+	fortune.scoreCards = &Deck{}
+	fortune.scoreCards.init()
 
 	fmt.Println("Listening on http://localhost:8080")
 
@@ -87,6 +91,10 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 
 	case path == "/fortune":
 		f.fortune()
+		path = ""
+
+	case path == "/scores":
+		f.scores()
 		path = ""
 	}
 
@@ -172,6 +180,7 @@ func (f *Fortune) deal() {
 		log.Printf("request: %v\n", request)
 		if request.Count == 3 {
 			response.Card = f.deck.Row2[3].Image
+			f.scoreCard(response.Card)
 			log.Printf("memorized card: %s\n", response.Card)
 		}
 	}
@@ -278,6 +287,32 @@ func (f *Fortune) fortune() {
 	}
 	response.Tweet = tweet
 	fmt.Printf("Visitor=%s word=%s fortune=%s\n", f.rq.RemoteAddr, key, tweet)
+
+	data, err := json.Marshal(response)
+	if err != nil {
+		response.Error = err.Error()
+	}
+	f.wr.Header().Set("Content-Type", "application/json")
+	f.wr.Write(data)
+}
+
+func (f *Fortune) scoreCard(memorizedCard string) {
+	for _, card := range f.scoreCards.Cards {
+		if card.Image == memorizedCard {
+			card.Score++
+		}
+	}
+}
+
+func (f *Fortune) scores() {
+	type Response struct {
+		ScoreCards []*Card
+		Error      string
+	}
+
+	response := &Response{}
+	sort.Sort(f.scoreCards)
+	response.ScoreCards = f.scoreCards.Cards
 
 	data, err := json.Marshal(response)
 	if err != nil {

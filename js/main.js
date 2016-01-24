@@ -6,6 +6,7 @@ function cardsController($scope, $http) {
 	$scope.http = $http
 	$scope.deal = deal
 	$scope.startOver = startOver
+	$scope.viewScores = viewScores
 	$scope.init = init
 	$scope.init()
 	$scope.fortune = document.getElementById('fortune')
@@ -49,7 +50,8 @@ function deal(row) {
 				}
 				scope.http.post('/fortune', JSON.stringify(req)).success(showFortune)
 			}
-			setTimeout(f, 1000)
+			if (!window.testing)
+				setTimeout(f, 1000)
 			return
 		}
 		//console.log(data)
@@ -91,4 +93,13 @@ function deal(row) {
 
 function startOver() {
 	this.init()
+}
+
+function viewScores() {
+	var scope = this
+	var response = function(data, status) {
+		scope.step = 4
+		scope.scoreCards = data.data.ScoreCards
+	}
+	scope.http.post('/scores', null).then(response, errorResponse)
 }

@@ -30,19 +30,19 @@
 			<a href="#" class='cmdSelect' ng-click='deal(3)' style='top:740px;left:20px'>Select</a>
 			<div class='deck' style='top:88px;left:100px'>
 				<span ng-repeat="card in row1">
-					<img class='card' ng-style="{left: $index * 100 + 'px'}" style='margin-top:20px'
+					<img class='card' ng-style="{left: $index * 100 + 'px'}" style='top:20px'
 						ng-src="playing-cards/{{card.Image}}"/>
 				</span>
 			</div>
 			<div class='deck' style='top:350px;left:100px'>
 				<span ng-repeat="card in row2">
-					<img class='card' ng-style="{left: $index * 100 + 'px'}"  style='margin-top:20px'
+					<img class='card' ng-style="{left: $index * 100 + 'px'}"  style='top:20px'
 						ng-src="playing-cards/{{card.Image}}"/>
 				</span>
 			</div>
 			<div class='deck' style='top:610px;left:100px'>
 				<span ng-repeat="card in row3">
-					<img class='card' ng-style="{left: $index * 100 + 'px'}"  style='margin-top:20px' 
+					<img class='card' ng-style="{left: $index * 100 + 'px'}"  style='top:20px' 
 						ng-src="playing-cards/{{card.Image}}"/>
 				</span>
 			</div>
@@ -58,11 +58,30 @@
 					<div style='padding-top:5px;color:green' id='fortune'>loading ...</div>
 				</div>
 				<div class='nav' style='padding-top:20px'>
-					<a href="javascript:;" class='cmd' ng-click='startOver()'>Start Over</a>
+					<a href="javascript:;" class='cmd' ng-click='startOver()'>Start Over</a> &nbsp;
+					<a href="javascript:;" class='cmd' ng-click='viewScores()'>View Scores</a>
 				</div>
 				<div style='padding:40px 0px 0px 20px'>
 					Source code: <a href='https://github.com/gophergala2016/gofortune'>
 						https://github.com/gophergala2016/gofortune</a>
+				</div>
+			</div>
+		</div>
+		<div ng-show="step == 4" class='page'>
+			<div style='padding:20px 0px 0x 20px'>
+				<div class='nav' style='padding-top:20px'>
+					<a href="javascript:;" class='cmd' ng-click='startOver()'>Start Over</a>
+				</div>
+				<div class='nav'>
+					Card popularity:
+				</div>
+				<div class='deck' style='top:88px;left:10px'>
+					<span ng-repeat="card in scoreCards">
+						<span class='card' ng-style="{left: $index * 70 + 'px'}" style='top:80px'>
+							<img ng-src="playing-cards/{{card.Image}}"/>
+							<span style='padding-left:4px'>{{card.Score}}</span>
+						</span>
+					</span>
 				</div>
 			</div>
 		</div>

@@ -14,6 +14,10 @@ type Deck struct {
 	Row3  []*Card
 }
 
+func (d Deck) Len() int           { return len(d.Cards) }
+func (d Deck) Swap(i, j int)      { d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i] }
+func (d Deck) Less(i, j int) bool { return d.Cards[i].Score > d.Cards[j].Score }
+
 var cardImages = []string{
 	"2C.png", "2D.png", "2H.png", "2S.png",
 	"3C.png", "3D.png", "3H.png", "3S.png",
