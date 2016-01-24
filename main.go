@@ -2,9 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
-	//"log"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -13,6 +14,15 @@ type Fortune struct {
 	wr   http.ResponseWriter
 	rq   *http.Request
 	deck *Deck
+}
+
+func init() {
+	debug := flag.Bool("d", false, "debug")
+	flag.Parse()
+
+	if !*debug {
+		log.SetOutput(ioutil.Discard)
+	}
 }
 
 func main() {
@@ -101,9 +111,9 @@ func (f *Fortune) deal() {
 		Step  int
 	}
 	type Response struct {
-		Row0  []*Card
 		Row1  []*Card
 		Row2  []*Card
+		Row3  []*Card
 		Error string
 	}
 
@@ -122,15 +132,22 @@ func (f *Fortune) deal() {
 			f.deck.Cards = append(f.deck.Cards, &Card{Image: card.Image})
 		}
 		if len(request.Cards) == 21 {
-			f.deck.deal(request.Row)
-			response.Row0 = f.deck.Cards[:7]
-			response.Row1 = f.deck.Cards[7:14]
-			response.Row2 = f.deck.Cards[14:]
+			if request.Row == 0 {
+				response.Row1 = f.deck.Cards[:7]
+				response.Row2 = f.deck.Cards[7:14]
+				response.Row3 = f.deck.Cards[14:]
+			} else {
+				f.deck.placeMiddle(request.Row)
+				f.deck.deal()
+				response.Row1 = f.deck.Row1
+				response.Row2 = f.deck.Row2
+				response.Row3 = f.deck.Row3
+			}
 		} else {
 			response.Error += "\nDeck should have 21 cards."
 		}
+		log.Printf("request: %v\n", request)
 	}
-	//log.Println(request)
 
 	data, err := json.Marshal(response)
 	if err != nil {

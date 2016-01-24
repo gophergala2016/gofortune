@@ -7,12 +7,11 @@ function cardsController($scope, $http) {
 	$scope.count = 1
 	$scope.http = $http
 	$scope.deal = deal
-	$scope.step2 = step2
 	var response = function(data, status) {
 		if (data.data.Error)
 			alert(data.data.Error)
 		$scope.cards = data.data.Cards
-		//console.log(data)
+		console.log(data)
 	}
 	$http.post('/init', null).then(response, errorResponse)
 }
@@ -23,26 +22,6 @@ function errorResponse(data, status) {
 	console.log(data)
 } 
 
-function step2() {
-	var scope = this
-	var cards = scope.cards
-	var row0 = []
-	var row1 = []
-	var row2 = []
-	for (var i=0; i<cards.length; i++) {
-		if (i<7)
-			row0.push(cards[i])
-		if (i>6 && i<14)
-			row1.push(cards[i])
-		if (i>13)
-			row2.push(cards[i])
-	}
-	scope.row0 = row0
-	scope.row1 = row1
-	scope.row2 = row2
-	scope.step = 2
-}
-
 function deal(row) {
 	var scope = this
 	var response = function(data, status) {
@@ -51,14 +30,22 @@ function deal(row) {
 			return
 		}
 		//console.log(data)
-		scope.row0 = data.data.Row0
 		scope.row1 = data.data.Row1
 		scope.row2 = data.data.Row2
+		scope.row3 = data.data.Row3
 		scope.count++
+		scope.step = 2
 	}
 	var cards = []
-	for (var i=0; i<scope.cards.length; i++) {
-		cards.push({Image: scope.cards[i].Image})
+	if (scope.step == 2) {
+		for (var i=0; i<scope.row1.length; i++)
+			cards.push({Image: scope.row1[i].Image})
+		for (var i=0; i<scope.row2.length; i++)
+			cards.push({Image: scope.row2[i].Image})
+		for (var i=0; i<scope.row3.length; i++)
+			cards.push({Image: scope.row3[i].Image})
+	} else {
+		cards = scope.cards
 	}
 	var data = {
 		Cards: cards,
