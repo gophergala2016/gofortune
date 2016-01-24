@@ -4,7 +4,7 @@ app.controller('cardsController', cardsController)
 
 function cardsController($scope, $http) {
 	$scope.step = 1
-	$scope.count = 1
+	$scope.count = 0
 	$scope.http = $http
 	$scope.deal = deal
 	var response = function(data, status) {
@@ -27,6 +27,11 @@ function deal(row) {
 	var response = function(data, status) {
 		if (data.data.Error) {
 			alert(data.data.Error)
+			return
+		}
+		if (data.data.Card) {
+			scope.step = 3
+			scope.yourCard = data.data.Card
 			return
 		}
 		//console.log(data)

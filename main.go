@@ -108,12 +108,13 @@ func (f *Fortune) deal() {
 	type Request struct {
 		Cards []RequestCard
 		Row   int
-		Step  int
+		Count int
 	}
 	type Response struct {
 		Row1  []*Card
 		Row2  []*Card
 		Row3  []*Card
+		Card  string
 		Error string
 	}
 
@@ -147,6 +148,10 @@ func (f *Fortune) deal() {
 			response.Error += "\nDeck should have 21 cards."
 		}
 		log.Printf("request: %v\n", request)
+		if request.Count == 3 {
+			response.Card = f.deck.Row2[3].Image
+			log.Printf("memorized card: %s\n", response.Card)
+		}
 	}
 
 	data, err := json.Marshal(response)

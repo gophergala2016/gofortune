@@ -46,6 +46,21 @@
 				</span>
 			</div>
 		</div>
+		<div ng-show="step == 3" class='page'>
+			<div style='padding:20px 0px 0x 20px'>
+				<div class='nav'>
+					Your card:<br/>
+					<img ng-src="playing-cards/{{yourCard}}"/>
+				</div>
+				<div class='nav' style='padding-top:20px'>
+					Your fortune (from Twitter):<br/>
+					{{fortune}}
+				</div>
+				<div class='nav' style='padding-top:20px'>
+					<a href="#" class='cmd' ng-click='location.href=location.href'>Start Over</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
