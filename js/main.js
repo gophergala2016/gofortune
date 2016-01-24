@@ -65,10 +65,10 @@ function deal(row) {
 			scope.info = 'Select the row that contains your card:'
 			break
 		case 2:
-			scope.info = 'Select the row that contains your card one more time:'
+			scope.info = 'Select the row that contains your card: Second time'
 			break
 		case 3:
-			scope.info = 'Select the row that contains your card last time:'
+			scope.info = 'Select the row that contains your card: Third time'
 			break
 		}
 	}
