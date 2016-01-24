@@ -51,7 +51,7 @@ function deal(row) {
 				scope.http.post('/fortune', JSON.stringify(req)).success(showFortune)
 			}
 			if (!window.testing)
-				setTimeout(f, 1000)
+				setTimeout(f, 250)
 			return
 		}
 		//console.log(data)
