@@ -154,6 +154,7 @@ func (f *Fortune) deal() {
 		if request.Count == 3 {
 			response.Card = f.deck.Row2[3].Image
 			log.Printf("memorized card: %s\n", response.Card)
+			fmt.Printf("Visitor %s memorized card %s\n", f.rq.RemoteAddr, response.Card)
 		}
 	}
 
