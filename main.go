@@ -228,7 +228,7 @@ func (f *Fortune) fortune() {
 		"QC.png":  "queen",
 		"QD.png":  "actress",
 		"QH.png":  "wife",
-		"QS.png":  "docker",
+		"QS.png":  "nurse",
 		"KC.png":  "congressman",
 		"KD.png":  "ceo",
 		"KH.png":  "lover",
