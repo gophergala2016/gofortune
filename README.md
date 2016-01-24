@@ -21,7 +21,9 @@ Screenshots
 ===========
 ![alt tag](http://angiud.com/gofortune/gofortune.png)
 <br><br>
-![alt tag](http://angiud.com/gofortune/gofortune2.png?1)
+![alt tag](http://angiud.com/gofortune/gofortune2.png)
+<br><br>
+![alt tag](http://angiud.com/gofortune/gofortune3.png)
 
 Author
 ======
