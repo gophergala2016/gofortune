@@ -20,8 +20,8 @@ Live version
 Screenshot
 ==========
 ![alt tag](http://angiud.com/gofortune/gofortune.png)
-<br>
-![alt tag](http://angiud.com/gofortune/gofortune2.png)
+<br><br>
+![alt tag](http://angiud.com/gofortune/gofortune2.png?1)
 
 Author
 ======
