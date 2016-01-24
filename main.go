@@ -36,6 +36,7 @@ func main() {
 	var fortune Fortune
 	fortune.scoreCards = &Deck{}
 	fortune.scoreCards.init()
+	fortune.restoreScores()
 
 	fmt.Println("Listening on http://localhost:8080")
 
@@ -300,8 +301,10 @@ func (f *Fortune) scoreCard(memorizedCard string) {
 	for _, card := range f.scoreCards.Cards {
 		if card.Image == memorizedCard {
 			card.Score++
+			break
 		}
 	}
+	f.saveScores()
 }
 
 func (f *Fortune) scores() {
@@ -320,4 +323,30 @@ func (f *Fortune) scores() {
 	}
 	f.wr.Header().Set("Content-Type", "application/json")
 	f.wr.Write(data)
+}
+
+func (f *Fortune) saveScores() {
+	data, err := json.Marshal(f.scoreCards)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = ioutil.WriteFile("scores.json", data, 0644)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func (f *Fortune) restoreScores() {
+	data, err := ioutil.ReadFile("scores.json")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = json.Unmarshal(data, f.scoreCards)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
