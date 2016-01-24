@@ -17,8 +17,6 @@ import (
 )
 
 type Fortune struct {
-	wr         http.ResponseWriter
-	rq         *http.Request
 	deck       *Deck
 	scoreCards *Deck
 }
@@ -56,9 +54,6 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 		}
 	}()
 
-	f.wr = wr
-	f.rq = rq
-
 	path := rq.URL.Path
 	contentType := "text/html"
 	root := "."
@@ -76,26 +71,28 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 
 	case strings.HasPrefix(path, "/html/"):
 		contentType = "text/html"
+	}
 
-	case path == "/":
+	switch path {
+	case "/":
 		contentType = "text/html"
 		path = "/html/main.html"
 		fmt.Printf("%s: Visitor from %s\n", time.Now(), rq.RemoteAddr)
 
-	case path == "/init":
-		f.init()
+	case "/init":
+		f.init(wr, rq)
 		path = ""
 
-	case path == "/deal":
-		f.deal()
+	case "/deal":
+		f.deal(wr, rq)
 		path = ""
 
-	case path == "/fortune":
-		f.fortune()
+	case "/fortune":
+		f.fortune(wr, rq)
 		path = ""
 
-	case path == "/scores":
-		f.scores()
+	case "/scores":
+		f.scores(wr, rq)
 		path = ""
 	}
 
@@ -110,7 +107,7 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 	}
 }
 
-func (f *Fortune) init() {
+func (f *Fortune) init(wr http.ResponseWriter, rq *http.Request) {
 	f.deck = &Deck{}
 	f.deck.init()
 	f.deck.shuffle()
@@ -128,11 +125,11 @@ func (f *Fortune) init() {
 	if err != nil {
 		response.Error = err.Error()
 	}
-	f.wr.Header().Set("Content-Type", "application/json")
-	f.wr.Write(data)
+	wr.Header().Set("Content-Type", "application/json")
+	wr.Write(data)
 }
 
-func (f *Fortune) deal() {
+func (f *Fortune) deal(wr http.ResponseWriter, rq *http.Request) {
 	type RequestCard struct {
 		Image string
 	}
@@ -150,7 +147,7 @@ func (f *Fortune) deal() {
 	}
 
 	response := &Response{}
-	reqData, err := ioutil.ReadAll(f.rq.Body)
+	reqData, err := ioutil.ReadAll(rq.Body)
 	if err != nil {
 		response.Error = err.Error()
 	} else {
@@ -190,11 +187,11 @@ func (f *Fortune) deal() {
 	if err != nil {
 		response.Error = err.Error()
 	}
-	f.wr.Header().Set("Content-Type", "application/json")
-	f.wr.Write(data)
+	wr.Header().Set("Content-Type", "application/json")
+	wr.Write(data)
 }
 
-func (f *Fortune) fortune() {
+func (f *Fortune) fortune(wr http.ResponseWriter, rq *http.Request) {
 	words := map[string]string{
 		"2C.png":  "passion",
 		"2D.png":  "wealth",
@@ -260,7 +257,7 @@ func (f *Fortune) fortune() {
 	response := &Response{}
 
 	request := &Request{}
-	reqData, err := ioutil.ReadAll(f.rq.Body)
+	reqData, err := ioutil.ReadAll(rq.Body)
 	err = json.Unmarshal(reqData, request)
 	if err != nil {
 		response.Error = err.Error()
@@ -287,14 +284,14 @@ func (f *Fortune) fortune() {
 		tweet = tweets[index]
 	}
 	response.Tweet = tweet
-	fmt.Printf("Visitor=%s word=%s fortune=%s\n", f.rq.RemoteAddr, key, tweet)
+	fmt.Printf("Visitor=%s word=%s fortune=%s\n", rq.RemoteAddr, key, tweet)
 
 	data, err := json.Marshal(response)
 	if err != nil {
 		response.Error = err.Error()
 	}
-	f.wr.Header().Set("Content-Type", "application/json")
-	f.wr.Write(data)
+	wr.Header().Set("Content-Type", "application/json")
+	wr.Write(data)
 }
 
 func (f *Fortune) scoreCard(memorizedCard string) {
@@ -307,7 +304,7 @@ func (f *Fortune) scoreCard(memorizedCard string) {
 	f.saveScores()
 }
 
-func (f *Fortune) scores() {
+func (f *Fortune) scores(wr http.ResponseWriter, rq *http.Request) {
 	type Response struct {
 		ScoreCards []*Card
 		Error      string
@@ -321,8 +318,8 @@ func (f *Fortune) scores() {
 	if err != nil {
 		response.Error = err.Error()
 	}
-	f.wr.Header().Set("Content-Type", "application/json")
-	f.wr.Write(data)
+	wr.Header().Set("Content-Type", "application/json")
+	wr.Write(data)
 }
 
 func (f *Fortune) saveScores() {
