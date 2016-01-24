@@ -60,6 +60,7 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 	case path == "/":
 		contentType = "text/html"
 		path = "/html/main.html"
+		fmt.Printf("Visitor from %s\n", rq.RemoteAddr)
 
 	case path == "/init":
 		f.init()
