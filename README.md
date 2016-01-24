@@ -1,4 +1,4 @@
-goforute
+gofortune
 ========
 
 A Go application that tells fortune based on your memorized card.<br>
