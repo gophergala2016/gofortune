@@ -172,7 +172,6 @@ func (f *Fortune) deal() {
 		if request.Count == 3 {
 			response.Card = f.deck.Row2[3].Image
 			log.Printf("memorized card: %s\n", response.Card)
-			fmt.Printf("Visitor %s memorized card %s\n", f.rq.RemoteAddr, response.Card)
 		}
 	}
 
@@ -276,6 +275,7 @@ func (f *Fortune) fortune() {
 		tweet = tweets[0]
 	}
 	response.Tweet = tweet
+	fmt.Printf("Visitor=%s word=%s fortune=%s\n", f.rq.RemoteAddr, key, tweet)
 
 	data, err := json.Marshal(response)
 	if err != nil {
