@@ -14,3 +14,8 @@ $ ./gofortune
 Navigate with a browser to: ```http://localhost:8080```
 <br><br>
 Live version: [http://angiud.com:8080](http://angiud.com:8080)
+
+Author
+======
+Batbold Dashzeveg [Github](https://github.com/dbatbold) [dbatbold@gmail.com](mailto:dbatbold@gmail.com)
+<br>
