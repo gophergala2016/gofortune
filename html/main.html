@@ -50,14 +50,14 @@
 			<div style='padding:20px 0px 0x 20px'>
 				<div class='nav'>
 					Your card:<br/>
-					<img ng-src="playing-cards/{{yourCard}}"/>
+					<img ng-src="playing-cards/{{yourCard}}" style='padding-top:10px'/>
 				</div>
 				<div class='nav' style='padding-top:20px'>
 					Your fortune (from Twitter):<br/>
 					{{fortune}}
 				</div>
 				<div class='nav' style='padding-top:20px'>
-					<a href="#" class='cmd' ng-click='location.href=location.href'>Start Over</a>
+					<a href="javascript:;" class='cmd' ng-click='startOver()'>Start Over</a>
 				</div>
 			</div>
 		</div>

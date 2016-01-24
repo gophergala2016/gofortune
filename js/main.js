@@ -7,6 +7,7 @@ function cardsController($scope, $http) {
 	$scope.count = 0
 	$scope.http = $http
 	$scope.deal = deal
+	$scope.startOver = startOver
 	var response = function(data, status) {
 		if (data.data.Error)
 			alert(data.data.Error)
@@ -58,4 +59,8 @@ function deal(row) {
 		Count: scope.count,
 	}
 	scope.http.post('/deal', JSON.stringify(data)).then(response, errorResponse)
+}
+
+function startOver() {
+	location.reload()
 }
