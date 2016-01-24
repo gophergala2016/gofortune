@@ -3,18 +3,25 @@ var app = angular.module('gofortune', [])
 app.controller('cardsController', cardsController)
 
 function cardsController($scope, $http) {
-	$scope.step = 1
-	$scope.count = 0
 	$scope.http = $http
 	$scope.deal = deal
 	$scope.startOver = startOver
+	$scope.init = init
+	$scope.init()
+	$scope.fortune = document.getElementById('fortune')
+}
+
+function init() {
+	var scope = this
+	scope.count = 0
+	scope.step = 1
 	var response = function(data, status) {
 		if (data.data.Error)
 			alert(data.data.Error)
-		$scope.cards = data.data.Cards
-		console.log(data)
+		scope.cards = data.data.Cards
+		//console.log(data)
 	}
-	$http.post('/init', null).then(response, errorResponse)
+	scope.http.post('/init', null).then(response, errorResponse)
 }
 
 
@@ -34,11 +41,11 @@ function deal(row) {
 			scope.step = 3
 			scope.yourCard = data.data.Card
 
-			scope.fortune = 'loading ...'
+			scope.fortune.innerHTML = 'loading ...'
 			var req = {Card: scope.yourCard}
 			var f = function() {
 				var showFortune = function(d) {
-					document.getElementById('fortune').innerHTML = d.Tweet
+					scope.fortune.innerHTML = d.Tweet
 				}
 				scope.http.post('/fortune', JSON.stringify(req)).success(showFortune)
 			}
@@ -72,5 +79,5 @@ function deal(row) {
 }
 
 function startOver() {
-	location.reload()
+	this.init()
 }
