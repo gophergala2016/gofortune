@@ -60,7 +60,7 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 	switch {
 	case strings.HasPrefix(path, "/playing-cards/"):
 		contentType = "image/png"
-		wr.Header().Set("cache-control", "public, max-age=0")
+		wr.Header().Set("cache-control", "public")
 
 	case strings.HasPrefix(path, "/js/"):
 		contentType = "application/javascript"
