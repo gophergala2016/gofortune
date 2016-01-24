@@ -52,9 +52,9 @@
 					Your card:<br/>
 					<img ng-src="playing-cards/{{yourCard}}" style='padding-top:10px'/>
 				</div>
-				<div class='nav' style='padding-top:20px'>
+				<div class='nav' style='padding-top:10px'>
 					Your fortune (from Twitter):<br/>
-					{{fortune}}
+					<div style='padding-top:5px;color:green' id='fortune'>loading ...</div>
 				</div>
 				<div class='nav' style='padding-top:20px'>
 					<a href="javascript:;" class='cmd' ng-click='startOver()'>Start Over</a>

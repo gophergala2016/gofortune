@@ -33,6 +33,16 @@ function deal(row) {
 		if (data.data.Card) {
 			scope.step = 3
 			scope.yourCard = data.data.Card
+
+			scope.fortune = 'loading ...'
+			var req = {Card: scope.yourCard}
+			var f = function() {
+				var showFortune = function(d) {
+					document.getElementById('fortune').innerHTML = d.Tweet
+				}
+				scope.http.post('/fortune', JSON.stringify(req)).success(showFortune)
+			}
+			setTimeout(f, 100)
 			return
 		}
 		//console.log(data)

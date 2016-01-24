@@ -17,5 +17,5 @@ Live version: [http://angiud.com:8080](http://angiud.com:8080)
 
 Author
 ======
-Batbold Dashzeveg [Github](https://github.com/dbatbold) [dbatbold@gmail.com](mailto:dbatbold@gmail.com)
+Batbold Dashzeveg [Github](https://github.com/dbatbold) ([dbatbold@gmail.com](mailto:dbatbold@gmail.com))
 <br>

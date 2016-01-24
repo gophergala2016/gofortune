@@ -4,10 +4,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
+	"runtime/debug"
 	"strings"
+	"time"
 )
 
 type Fortune struct {
@@ -37,6 +41,15 @@ func main() {
 }
 
 func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
+	defer func() {
+		obj := recover()
+		if obj != nil {
+			msg := fmt.Sprintf("<pre>Error: %v\nStack: %v</pre>", obj, string(debug.Stack()))
+			io.WriteString(wr, msg)
+			fmt.Println(msg)
+		}
+	}()
+
 	f.wr = wr
 	f.rq = rq
 
@@ -47,6 +60,7 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 	switch {
 	case strings.HasPrefix(path, "/playing-cards/"):
 		contentType = "image/png"
+		wr.Header().Set("cache-control", "public, max-age=0")
 
 	case strings.HasPrefix(path, "/js/"):
 		contentType = "application/javascript"
@@ -60,7 +74,7 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 	case path == "/":
 		contentType = "text/html"
 		path = "/html/main.html"
-		fmt.Printf("Visitor from %s\n", rq.RemoteAddr)
+		fmt.Printf("%s: Visitor from %s\n", time.Now(), rq.RemoteAddr)
 
 	case path == "/init":
 		f.init()
@@ -69,10 +83,14 @@ func (f *Fortune) ServeHTTP(wr http.ResponseWriter, rq *http.Request) {
 	case path == "/deal":
 		f.deal()
 		path = ""
+
+	case path == "/fortune":
+		f.fortune()
+		path = ""
 	}
 
 	if len(path) > 0 {
-		wr.Header().Add("Content-Type", contentType)
+		wr.Header().Set("Content-Type", contentType)
 		data, err := ioutil.ReadFile(root + path)
 		if err == nil {
 			wr.Write(data)
@@ -100,7 +118,7 @@ func (f *Fortune) init() {
 	if err != nil {
 		response.Error = err.Error()
 	}
-	f.wr.Header().Add("Content-Type", "application/json")
+	f.wr.Header().Set("Content-Type", "application/json")
 	f.wr.Write(data)
 }
 
@@ -162,6 +180,107 @@ func (f *Fortune) deal() {
 	if err != nil {
 		response.Error = err.Error()
 	}
-	f.wr.Header().Add("Content-Type", "application/json")
+	f.wr.Header().Set("Content-Type", "application/json")
+	f.wr.Write(data)
+}
+
+func (f *Fortune) fortune() {
+	words := map[string]string{
+		"2C.png":  "law",
+		"2D.png":  "wealth",
+		"2H.png":  "love",
+		"2S.png":  "passion",
+		"3C.png":  "rule",
+		"3D.png":  "rich",
+		"3H.png":  "like",
+		"3S.png":  "interest",
+		"4C.png":  "command",
+		"4D.png":  "gold",
+		"4H.png":  "nice",
+		"4S.png":  "positive",
+		"5C.png":  "advise",
+		"5D.png":  "money",
+		"5H.png":  "related",
+		"5S.png":  "real",
+		"6C.png":  "statement",
+		"6D.png":  "fortune",
+		"6H.png":  "good",
+		"6S.png":  "growing",
+		"7C.png":  "court",
+		"7D.png":  "well",
+		"7H.png":  "sweet",
+		"7S.png":  "study",
+		"8C.png":  "action",
+		"8D.png":  "cash",
+		"8H.png":  "protect",
+		"8S.png":  "understand",
+		"9C.png":  "act",
+		"9D.png":  "stock",
+		"9H.png":  "live",
+		"9S.png":  "hobby",
+		"10C.png": "order",
+		"10D.png": "value",
+		"10H.png": "friend",
+		"10S.png": "knowledge",
+		"JC.png":  "judge",
+		"JD.png":  "banker",
+		"JH.png":  "husband",
+		"JS.png":  "student",
+		"QC.png":  "queen",
+		"QD.png":  "actress",
+		"QH.png":  "wife",
+		"QS.png":  "docker",
+		"KC.png":  "congressman",
+		"KD.png":  "ceo",
+		"KH.png":  "lover",
+		"KS.png":  "researcher",
+		"AC.png":  "country",
+		"AD.png":  "thesaurus",
+		"AH.png":  "family",
+		"AS.png":  "president",
+	}
+	type Request struct {
+		Card string
+	}
+	type Response struct {
+		Tweet string
+		Error string
+	}
+
+	response := &Response{}
+
+	request := &Request{}
+	reqData, err := ioutil.ReadAll(f.rq.Body)
+	err = json.Unmarshal(reqData, request)
+	if err != nil {
+		response.Error = err.Error()
+	}
+
+	key, _ := words[request.Card]
+	url := "https://twitter.com/search?q=" + key
+	resp, err := http.Get(url)
+	if err != nil {
+		response.Error = "Error: " + err.Error()
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		response.Error = "Error: " + err.Error()
+	}
+	resp.Body.Close()
+
+	search := regexp.MustCompile(`<p class="TweetTextSize .*>.*</p>`)
+	tweets := search.FindStringSubmatch(string(body))
+
+	tweet := "Unable to fetch tweets."
+	if len(tweets) > 0 {
+		tweet = tweets[0]
+	}
+	response.Tweet = tweet
+
+	data, err := json.Marshal(response)
+	if err != nil {
+		response.Error = err.Error()
+	}
+	f.wr.Header().Set("Content-Type", "application/json")
 	f.wr.Write(data)
 }
