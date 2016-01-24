@@ -17,8 +17,8 @@ Live version
 ============
 [http://angiud.com:8080](http://angiud.com:8080)
 
-Screenshot
-==========
+Screenshots
+===========
 ![alt tag](http://angiud.com/gofortune/gofortune.png)
 <br><br>
 ![alt tag](http://angiud.com/gofortune/gofortune2.png?1)
