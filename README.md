@@ -19,11 +19,13 @@ Demo version
 
 Screenshots
 ===========
-![alt tag](http://angiud.com/gofortune/gofortune.png?2)
+![alt tag](http://angiud.com/gofortune/gofortune.png?3)
 <br><br>
-![alt tag](http://angiud.com/gofortune/gofortune2.png?2)
+![alt tag](http://angiud.com/gofortune/gofortune2.png?3)
 <br><br>
-![alt tag](http://angiud.com/gofortune/gofortune3.png?2)
+![alt tag](http://angiud.com/gofortune/gofortune3.png?3)
+<br><br>
+![alt tag](http://angiud.com/gofortune/gofortune4.png?3)
 
 Author
 ======
