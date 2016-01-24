@@ -16,7 +16,7 @@
 			</div>
 			<div class='deck'>
 				<span ng-repeat="card in cards">
-					<img class='card' style='margin:20px 0px 0px {{$index*40}}px' 
+					<img class='card' ng-style="{left: $index * 40 +'px'}" style='margin-top:20px'
 						ng-src="playing-cards/{{card.Image}}"/>
 				</span>
 			</div>
@@ -30,19 +30,19 @@
 			<a href="#" class='cmdSelect' ng-click='deal(3)' style='top:740px;left:20px'>Select</a>
 			<div class='deck' style='top:88px;left:100px'>
 				<span ng-repeat="card in row1">
-					<img class='card' style='margin:20px 0px 0px {{$index*100}}px' 
+					<img class='card' ng-style="{left: $index * 100 + 'px'}" style='margin-top:20px'
 						ng-src="playing-cards/{{card.Image}}"/>
 				</span>
 			</div>
 			<div class='deck' style='top:350px;left:100px'>
 				<span ng-repeat="card in row2">
-					<img class='card' style='margin:20px 0px 0px {{$index*100}}px' 
+					<img class='card' ng-style="{left: $index * 100 + 'px'}"  style='margin-top:20px'
 						ng-src="playing-cards/{{card.Image}}"/>
 				</span>
 			</div>
 			<div class='deck' style='top:610px;left:100px'>
 				<span ng-repeat="card in row3">
-					<img class='card' style='margin:20px 0px 0px {{$index*100}}px' 
+					<img class='card' ng-style="{left: $index * 100 + 'px'}"  style='margin-top:20px' 
 						ng-src="playing-cards/{{card.Image}}"/>
 				</span>
 			</div>
