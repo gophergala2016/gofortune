@@ -7,9 +7,9 @@ function cardsController($scope, $http) {
 	$scope.deal = deal
 	$scope.startOver = startOver
 	$scope.viewScores = viewScores
+	$scope.fortune = document.getElementById('fortune')
 	$scope.init = init
 	$scope.init()
-	$scope.fortune = document.getElementById('fortune')
 }
 
 function init() {
