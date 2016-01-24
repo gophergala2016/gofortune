@@ -56,8 +56,19 @@ function deal(row) {
 		scope.row1 = data.data.Row1
 		scope.row2 = data.data.Row2
 		scope.row3 = data.data.Row3
-		scope.count++
 		scope.step = 2
+		scope.count++
+		switch (scope.count) {
+		case 1:
+			scope.info = 'Select the row that contains your card:'
+			break
+		case 2:
+			scope.info = 'Select the row that contains your card one more time:'
+			break
+		case 3:
+			scope.info = 'Select the row that contains your card last time:'
+			break
+		}
 	}
 	var cards = []
 	if (scope.step == 2) {
