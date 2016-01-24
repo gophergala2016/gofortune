@@ -13,7 +13,7 @@ $ ./gofortune
 ```
 Navigate with a browser to: ```http://localhost:8080```
 
-Live version
+Demo version
 ============
 [http://angiud.com:8080](http://angiud.com:8080)
 
