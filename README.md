@@ -16,7 +16,7 @@ Navigate with a browser to: ```http://localhost:8080```
 Demo version
 ============
 [http://angiud.com:8080](http://angiud.com:8080)<br><br>
-If 8080 is blocked, use:<br>
+If 8080 port is blocked, use:<br>
 [http://gofortune.angiud.com](http://gofortune.angiud.com)<br>
 
 Screenshots
