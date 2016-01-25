@@ -1,7 +1,7 @@
 gofortune
 =========
 
-A Go application for [Gopher Gala](http://gophergala.com) that tells fortune based on memorized cards.<br>
+A Go application for [Gopher Gala](http://gophergala.com) that tells Twitter fortune based on memorized cards.<br>
 
 How to build and run
 ====================
